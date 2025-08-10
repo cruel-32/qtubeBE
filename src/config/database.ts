@@ -1,0 +1,54 @@
+import { FastifyInstance } from 'fastify'
+import { DataSource } from 'typeorm'
+import { config } from '@/config/env'
+import { Quiz, User, Answer, Category, Report, RankingScore, Badge, UserBadge } from '@/entities'
+
+export const AppDataSource = new DataSource({
+  type: 'postgres',
+  host: config.database.host,
+  port: config.database.port,
+  username: config.database.user,
+  password: config.database.password,
+  database: config.database.name,
+  synchronize: config.nodeEnv === 'development',
+  logging: config.nodeEnv === 'development',
+  entities: [Quiz, User, Answer, Category, Report, RankingScore, Badge, UserBadge],
+  migrations: [__dirname + '/../migrations/**/*.{ts,js}'],
+  subscribers: [__dirname + '/../subscribers/**/*.{ts,js}'],
+  extra: {
+    timezone: 'UTC'
+  }
+})
+
+export const registerPostgres = async (fastify: FastifyInstance) => {
+  await fastify.register(require('@fastify/postgres'), {
+    connectionString: `postgresql://${config.database.user}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.name}`
+  })
+}
+
+export const connectDatabase = async (fastify: FastifyInstance): Promise<void> => {
+  try {
+    // TypeORM 연결
+    await AppDataSource.initialize()
+    fastify.log.info('TypeORM connection established successfully')
+    
+    // Fastify Postgres 플러그인 등록 (기존 코드와의 호환성을 위해)
+    await registerPostgres(fastify)
+    fastify.log.info('Fastify PostgreSQL plugin registered successfully')
+  } catch (error) {
+    fastify.log.error('Error connecting to database:', error)
+    fastify.log.error('Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      name: error instanceof Error ? error.name : undefined
+    })
+    fastify.log.error('Database config:', {
+      host: config.database.host,
+      port: config.database.port,
+      database: config.database.name,
+      user: config.database.user
+    })
+    console.error('Full error object:', error)
+    throw error
+  }
+}

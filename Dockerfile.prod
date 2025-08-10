@@ -1,0 +1,16 @@
+# Production Dockerfile for qtube backend
+FROM node:22
+
+# 타임존 설정 추가
+
+
+
+WORKDIR /app
+
+COPY . .
+RUN npm install && rm -rf ./public/* && rm -rf ./build/*
+
+RUN npm run build
+
+EXPOSE 8090
+CMD ["npm", "start"]
