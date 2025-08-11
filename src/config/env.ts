@@ -25,7 +25,11 @@ const envSchema = z.object({
   CORS_ORIGIN: z.string(),
   SWAGGER_ENABLED: z.string().transform(v => v === 'true'),
   API_HOST: z.string(),
-  FIREBASE_ADMIN_SDK_PATH: z.string(),
+  // Firebase Admin credentials
+  FIREBASE_ADMIN_SDK_PATH: z.string().optional(),
+  FIREBASE_PROJECT_ID: z.string().optional(),
+  FIREBASE_CLIENT_EMAIL: z.string().optional(),
+  FIREBASE_PRIVATE_KEY: z.string().optional(),
 })
 
 const env = envSchema.parse(process.env)
@@ -56,4 +60,7 @@ export const config = {
   swaggerEnabled: env.SWAGGER_ENABLED,
   apiHost: env.API_HOST,
   firebaseAdminSdkPath: env.FIREBASE_ADMIN_SDK_PATH,
+  firebaseProjectId: env.FIREBASE_PROJECT_ID,
+  firebaseClientEmail: env.FIREBASE_CLIENT_EMAIL,
+  firebasePrivateKey: env.FIREBASE_PRIVATE_KEY,
 }

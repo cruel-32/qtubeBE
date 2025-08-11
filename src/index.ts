@@ -29,12 +29,24 @@ declare module '@fastify/jwt' {
 }
 
 // Firebase Admin SDK 초기화
-const serviceAccount = require(config.firebaseAdminSdkPath);
-
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+  if (config.firebaseProjectId && config.firebaseClientEmail && config.firebasePrivateKey) {
+    // Prefer explicit env variables (e.g., Railway)
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: config.firebaseProjectId,
+        clientEmail: config.firebaseClientEmail,
+        privateKey: (config.firebasePrivateKey || '').replace(/\\n/g, '\n'),
+      } as admin.ServiceAccount),
+    });
+  } else if (config.firebaseAdminSdkPath) {
+    const serviceAccount = require(config.firebaseAdminSdkPath);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+    });
+  } else {
+    throw new Error('Firebase credentials are not configured');
+  }
 }
 
 // Set timezone for the application to UTC

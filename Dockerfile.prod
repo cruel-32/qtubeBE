@@ -26,8 +26,6 @@ RUN npm install --omit=dev
 
 # Copy built assets from the builder stage
 COPY --from=builder /app/dist ./dist
-# Copy firebase admin sdk json
-COPY --from=builder /app/qtube-firebase-adminsdk.json ./qtube-firebase-adminsdk.json
 
 
 # Railway provides the PORT environment variable, which the app should use.
