@@ -17,6 +17,12 @@ const envSchema = z.object({
   DB_USER: z.string().optional(),
   DB_PASSWORD: z.string().optional(),
   DATABASE_URL: z.string().optional(),
+  // Common PG envs (Railway, Heroku, etc.)
+  PGHOST: z.string().optional(),
+  PGPORT: z.string().transform(Number).optional(),
+  PGDATABASE: z.string().optional(),
+  PGUSER: z.string().optional(),
+  PGPASSWORD: z.string().optional(),
   
   // Redis
   REDIS_HOST: z.string().optional(),
@@ -42,11 +48,11 @@ export const config = {
   port: env.PORT,
   
   database: {
-    host: env.DB_HOST,
-    port: env.DB_PORT,
-    name: env.DB_NAME,
-    user: env.DB_USER,
-    password: env.DB_PASSWORD,
+    host: env.DB_HOST ?? env.PGHOST,
+    port: env.DB_PORT ?? env.PGPORT,
+    name: env.DB_NAME ?? env.PGDATABASE,
+    user: env.DB_USER ?? env.PGUSER,
+    password: env.DB_PASSWORD ?? env.PGPASSWORD,
     url: env.DATABASE_URL,
   },
   

@@ -46,6 +46,16 @@ export const registerPostgres = async (fastify: FastifyInstance) => {
 
 export const connectDatabase = async (fastify: FastifyInstance): Promise<void> => {
   try {
+    // Guard: In production, ensure we are not trying to use localhost defaults without config
+    if (config.nodeEnv === 'production') {
+      const hasUrl = Boolean(config.database.url)
+      const hasAllDirect = Boolean(
+        config.database.host && config.database.port && config.database.user && config.database.name
+      )
+      if (!hasUrl && !hasAllDirect) {
+        throw new Error('Database configuration missing in production. Set DATABASE_URL or full DB_* / PG* vars.')
+      }
+    }
     // TypeORM 연결
     await AppDataSource.initialize()
     fastify.log.info('TypeORM connection established successfully')
