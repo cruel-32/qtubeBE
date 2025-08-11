@@ -39,6 +39,14 @@ const envSchema = z.object({
   FIREBASE_PROJECT_ID: z.string().optional(),
   FIREBASE_CLIENT_EMAIL: z.string().optional(),
   FIREBASE_PRIVATE_KEY: z.string().optional(),
+}).refine((data) => {
+    if (data.NODE_ENV === 'production') {
+        return data.DATABASE_URL && data.DATABASE_URL.length > 0;
+    }
+    return true;
+}, {
+    message: 'DATABASE_URL is required in the production environment.',
+    path: ['DATABASE_URL'],
 })
 
 const env = envSchema.parse(process.env)

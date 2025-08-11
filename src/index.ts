@@ -4,7 +4,7 @@ import jwt from '@fastify/jwt' // @fastify/jwt 임포트
 import * as admin from 'firebase-admin'
 import { config } from '@/config/env'
 import { connectDatabase, AppDataSource } from '@/config/database'
-import { connectRedis } from '@/config/redis'
+// import { connectRedis } from '@/config/redis'
 import { Quiz, User, Answer, Category, Report, UserBadge, Badge } from '@/entities'
 import corsPlugin from '@/plugins/cors'
 import swaggerPlugin from '@/plugins/swagger'
@@ -27,7 +27,7 @@ declare module '@fastify/jwt' {
     };
   }
 }
-
+console.log('process.env :::::: ', process.env);
 // Firebase Admin SDK 초기화
 if (!admin.apps.length) {
   const hasExplicitCreds = Boolean(
@@ -173,14 +173,14 @@ fastify.get('/health', async (request, reply) => {
     await fastify.orm.query('SELECT 1')
     
     // Redis 연결 확인
-    await fastify.redis.ping()
+    // await fastify.redis.ping()
     
     return { 
       status: 'ok', 
       timestamp: new Date().toISOString(),
       services: {
         postgres: 'connected',
-        redis: 'connected',
+        // redis: 'connected',
         typeorm: 'connected'
       }
     }
@@ -260,6 +260,7 @@ fastify.get('/test/postgres', async (request, reply) => {
 })
 
 // Redis 테스트 엔드포인트
+/*
 fastify.get('/test/redis', async (request, reply) => {
   try {
     const testKey = 'test_key'
@@ -281,6 +282,7 @@ fastify.get('/test/redis', async (request, reply) => {
     return
   }
 })
+*/
 
 // API 라우트 등록
 const setupRoutes = async () => {
