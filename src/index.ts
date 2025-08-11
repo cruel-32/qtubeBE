@@ -30,22 +30,35 @@ declare module '@fastify/jwt' {
 
 // Firebase Admin SDK 초기화
 if (!admin.apps.length) {
-  if (config.firebaseProjectId && config.firebaseClientEmail && config.firebasePrivateKey) {
-    // Prefer explicit env variables (e.g., Railway)
+  const hasExplicitCreds = Boolean(
+    config.firebaseProjectId && config.firebaseClientEmail && config.firebasePrivateKey
+  )
+
+  if (hasExplicitCreds) {
     admin.initializeApp({
       credential: admin.credential.cert({
-        projectId: config.firebaseProjectId,
-        clientEmail: config.firebaseClientEmail,
+        projectId: config.firebaseProjectId!,
+        clientEmail: config.firebaseClientEmail!,
         privateKey: (config.firebasePrivateKey || '').replace(/\\n/g, '\n'),
       } as admin.ServiceAccount),
-    });
+    })
   } else if (config.firebaseAdminSdkPath) {
-    const serviceAccount = require(config.firebaseAdminSdkPath);
+    // Fallback to JSON path when provided
+    const serviceAccount = require(config.firebaseAdminSdkPath)
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
-    });
+    })
   } else {
-    throw new Error('Firebase credentials are not configured');
+    // Final fallback: Application Default Credentials (e.g., GOOGLE_APPLICATION_CREDENTIALS)
+    try {
+      admin.initializeApp({
+        credential: admin.credential.applicationDefault(),
+      })
+    } catch (e) {
+      throw new Error(
+        'Firebase credentials are not configured. Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY, or provide FIREBASE_ADMIN_SDK_PATH, or configure GOOGLE_APPLICATION_CREDENTIALS.'
+      )
+    }
   }
 }
 
