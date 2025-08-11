@@ -38,6 +38,7 @@ export const registerPostgres = async (fastify: FastifyInstance) => {
     ? config.database.url
     : `postgresql://${config.database.user}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.name}`;
 
+  console.log('connectionString :::::: ', connectionString);
   await fastify.register(require('@fastify/postgres'), {
     connectionString: connectionString,
     ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
