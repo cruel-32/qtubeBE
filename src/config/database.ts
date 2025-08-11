@@ -1,28 +1,46 @@
 import { FastifyInstance } from 'fastify'
-import { DataSource } from 'typeorm'
+import { DataSource, DataSourceOptions } from 'typeorm'
 import { config } from '@/config/env'
 import { Quiz, User, Answer, Category, Report, RankingScore, Badge, UserBadge } from '@/entities'
 
-export const AppDataSource = new DataSource({
+const baseOptions: DataSourceOptions = {
   type: 'postgres',
-  host: config.database.host,
-  port: config.database.port,
-  username: config.database.user,
-  password: config.database.password,
-  database: config.database.name,
   synchronize: config.nodeEnv === 'development',
   logging: config.nodeEnv === 'development',
   entities: [Quiz, User, Answer, Category, Report, RankingScore, Badge, UserBadge],
   migrations: [__dirname + '/../migrations/**/*.{ts,js}'],
   subscribers: [__dirname + '/../subscribers/**/*.{ts,js}'],
   extra: {
-    timezone: 'UTC'
-  }
-})
+    timezone: 'UTC',
+    ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+  },
+};
+
+const dataSourceOptions: DataSourceOptions = config.nodeEnv === 'production' && config.database.url
+  ? {
+      ...baseOptions,
+      url: config.database.url,
+    }
+  : {
+      ...baseOptions,
+      host: config.database.host,
+      port: config.database.port,
+      username: config.database.user,
+      password: config.database.password,
+      database: config.database.name,
+    };
+
+export const AppDataSource = new DataSource(dataSourceOptions);
+
 
 export const registerPostgres = async (fastify: FastifyInstance) => {
+  const connectionString = config.nodeEnv === 'production' && config.database.url
+    ? config.database.url
+    : `postgresql://${config.database.user}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.name}`;
+
   await fastify.register(require('@fastify/postgres'), {
-    connectionString: `postgresql://${config.database.user}:${config.database.password}@${config.database.host}:${config.database.port}/${config.database.name}`
+    connectionString: connectionString,
+    ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
   })
 }
 
@@ -46,7 +64,8 @@ export const connectDatabase = async (fastify: FastifyInstance): Promise<void> =
       host: config.database.host,
       port: config.database.port,
       database: config.database.name,
-      user: config.database.user
+      user: config.database.user,
+      url: config.database.url,
     })
     console.error('Full error object:', error)
     throw error

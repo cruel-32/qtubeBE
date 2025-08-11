@@ -118,7 +118,7 @@ const setupPlugins = async () => {
 const setupConnections = async () => {
   try {
     await connectDatabase(fastify)
-    await connectRedis(fastify)
+    // await connectRedis(fastify)
     await setupRepositories()
   } catch (error) {
     fastify.log.error('Failed to setup connections:', error)
