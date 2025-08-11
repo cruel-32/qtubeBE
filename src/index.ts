@@ -77,9 +77,20 @@ const setupPlugins = async () => {
   await fastify.register(zodPlugin)
 
   // JWT 플러그인 등록
+  const resolvedJwtSecret: string = (() => {
+    if (!config.jwtSecret) {
+      if (config.nodeEnv === 'production') {
+        throw new Error('JWT_SECRET is required in production environment')
+      }
+      fastify.log.warn('JWT_SECRET is not set; using a development fallback secret')
+      return 'dev-secret'
+    }
+    return config.jwtSecret
+  })()
+
   fastify.register(jwt, {
-    secret: config.jwtSecret, // 환경 변수에서 JWT 시크릿 키 가져오기
-  });
+    secret: resolvedJwtSecret,
+  })
 
   // authenticate 헬퍼 함수 추가
   fastify.decorate('authenticate', async (request: FastifyRequest, reply: FastifyReply) => {
