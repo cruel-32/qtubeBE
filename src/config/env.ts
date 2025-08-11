@@ -19,9 +19,9 @@ const envSchema = z.object({
   DATABASE_URL: z.string().optional(),
   
   // Redis
-  REDIS_HOST: z.string(),
-  REDIS_PORT: z.string().transform(Number),
-  REDIS_URL: z.string(),
+  REDIS_HOST: z.string().optional(),
+  REDIS_PORT: z.string().optional().transform(Number),
+  REDIS_URL: z.string().optional(),
   JWT_SECRET: z.string(),
   JWT_REFRESH_SECRET: z.string(),
   ADMIN_USER_IDS: z.string(),
