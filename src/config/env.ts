@@ -1,7 +1,10 @@
 import { z } from 'zod'
 import dotenv from 'dotenv'
 
-dotenv.config({ path: '.env.development' })
+// Only load local env file outside production (e.g., Railway)
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: '.env.development' })
+}
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
