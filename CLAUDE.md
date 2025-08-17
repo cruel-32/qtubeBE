@@ -6,7 +6,7 @@
 ## 프로젝트 정보
 이 프로젝트는 React Native를 사용한 퀴즈 앱 "qtube"입니다.
 
-- 메인 프로젝트: `/qtube/qtubeapps/` (React Native/Expo/TypeScript)
+- 메인 프로젝트: `/qtube/FE/` (React Native/Expo/TypeScript)
 - api 서버 : `/qtube/BE/` (nodejs/fastify/postgres/redis)
 
 ## 기술 스택
@@ -86,15 +86,19 @@ BE/
 - 파일에 대한 경로를 알려주면 직접 접근이 힘들 때는 @wonderwhy-er/desktop-commander 를 사용하여 접근한다.
 - 로컬 postgre에 접속할 땐 postgre-sql-mcp-server 를 사용하여 접근한다.
 
-### 퀴즈를 만들때 가이드 
+### 퀴즈를 만들때 가이드라인 
 - 본 앱은 매일 카테고리 별 새로운 퀴즈를 제공하는 게임 앱이다.
 - 퀴즈를 생성할때는 /Users/seungheechoi/develop/qtube/BE/src/entities/Quiz.ts 엔티티에 맞춰 생성한다. 
+- 퀴즈는 갯수를 지정하지 않으면 카테고리별로 각 기본 20개씩 만든다.
 - insert할 테이블은 qtube의 quiz테이블이다.
 - 퀴즈의 갯수는 객관식과 주관식 비율이 9:1이 되도록 제작한다.
 - 객관식은 type이 0, 주관식은 type이 1이다.
 - 주관식은 정답이 단답형에 10자 이하, 그리고 특수문자가 포함 되지 않아야 한다.
 - 객관식은 4개의 문항이 존재해야 한다.
 - 객관식의 자세한 지침은 아래 '범용 퀴즈 유형 분류 및 정의' 를 따른다.
+- 만약 주제가 고유명사라면 지문에서 고유명사에 대한 언급이 있어야 한다. 
+- 퀴즈를 생성하여 DB에 바로 insert할 수 있게끔 sql파일로 만든다.
+- 파일명은 [categoryId].sql 이런식으로 해줘.
 
 # 범용 퀴즈 유형 분류 및 정의
 

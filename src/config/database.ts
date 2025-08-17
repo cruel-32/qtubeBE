@@ -5,7 +5,7 @@ import { Quiz, User, Answer, Category, Report, RankingScore, Badge, UserBadge } 
 
 const baseOptions: DataSourceOptions = {
   type: 'postgres',
-  synchronize: true, // config.nodeEnv === 'development',
+  synchronize: config.nodeEnv === 'development',
   logging: config.nodeEnv === 'development',
   entities: [Quiz, User, Answer, Category, Report, RankingScore, Badge, UserBadge],
   migrations: [__dirname + '/../migrations/**/*.{ts,js}'],
