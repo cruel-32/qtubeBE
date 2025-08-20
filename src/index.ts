@@ -134,7 +134,7 @@ const setupPlugins = async () => {
 
   // Global hook for authentication
   fastify.addHook('onRequest', async (request, reply) => {
-    const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/kakao', '/api/auth/naver',  '/api/auth/refresh', '/health', '/'];
+    const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/refresh', '/health', '/'];
     if (publicRoutes.includes(request.url) || request.url.startsWith('/docs')) {
       return;
     }

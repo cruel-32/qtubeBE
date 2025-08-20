@@ -7,9 +7,6 @@ async function authRoutes(fastify: FastifyInstance) {
   // Google 로그인
   fastify.post('/google', AuthController.googleLogin);
 
-  // Kakao 로그인
-  fastify.post('/kakao', AuthController.kakaoLogin);
-  
   // 개발 환경에서만 사용 가능한 테스트 로그인
   if (config.nodeEnv === 'development') {
     fastify.post('/test-login', {

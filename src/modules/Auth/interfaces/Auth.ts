@@ -2,10 +2,6 @@ export interface GoogleLoginRequest {
   idToken: string;
 }
 
-export interface KakaoLoginRequest {
-  accessToken: string;
-}
-
 export interface RefreshTokenRequest {
   refreshToken: string;
 }

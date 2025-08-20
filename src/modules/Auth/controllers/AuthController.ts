@@ -7,7 +7,6 @@ import {
   LogoutRequest,
   AuthResponse,
   TestLoginRequest,
-  KakaoLoginRequest,
 } from '@/modules/Auth/interfaces/Auth'
 import { config } from '@/config/env' // config 임포트 추가
 import axios from 'axios';
@@ -129,98 +128,6 @@ export class AuthController {
       reply.status(500).send({
         success: false,
         error: '구글 로그인에 실패했습니다.',
-        details: (error instanceof Error) ? error.message : String(error),
-      });
-    }
-  }
-
-  static async kakaoLogin(
-    request: FastifyRequest<{ Body: KakaoLoginRequest }>,
-    reply: FastifyReply
-  ) {
-    try {
-      request.log.info('Kakao login 시작');
-      const { accessToken: kakaoAccessToken } = request.body;
-
-      if (!kakaoAccessToken) {
-        request.log.error('Kakao Access Token이 없음');
-        reply.status(400).send({
-          success: false,
-          error: '카카오 액세스 토큰이 필요합니다.',
-        });
-        return;
-      }
-
-      request.log.info('카카오 사용자 정보 요청 시작');
-      const { data: kakaoUser } = await axios.get('https://kapi.kakao.com/v2/user/me', {
-        headers: { Authorization: `Bearer ${kakaoAccessToken}` },
-      });
-      request.log.info('카카오 사용자 정보 요청 성공', { kakaoId: kakaoUser.id });
-
-      const kakaoId = kakaoUser.id.toString();
-      const email = kakaoUser.kakao_account?.email;
-      const name = kakaoUser.properties?.nickname;
-      const picture = kakaoUser.properties?.profile_image;
-
-      let user = await request.server.repositories.user.findOne({
-        where: { id: kakaoId, platform: Platform.KAKAO },
-      });
-
-      if (!user) {
-        user = request.server.repositories.user.create({
-          id: kakaoId,
-          email: email || undefined,
-          name: name || undefined,
-          nickName: name || undefined,
-          picture: picture || undefined,
-          platform: Platform.KAKAO,
-        });
-        user = await request.server.repositories.user.save(user);
-      } else {
-        if (email) user.email = email;
-        if (name) user.name = name;
-        if (picture !== undefined) user.picture = picture;
-        user = await request.server.repositories.user.save(user);
-      }
-
-      request.log.info('JWT 토큰 생성 시작');
-      const accessToken = await reply.jwtSign(
-        { id: user.id },
-        { expiresIn: ACCESS_TOKEN_EXPIRES_IN }
-      );
-      const refreshToken = await reply.jwtSign(
-        { id: user.id },
-        { expiresIn: REFRESH_TOKEN_EXPIRES_IN }
-      );
-      request.log.info('JWT 토큰 생성 완료');
-
-      user.refreshToken = refreshToken;
-      await request.server.repositories.user.save(user);
-      request.log.info('refreshToken 저장 완료');
-
-      const authResponse: AuthResponse = {
-        accessToken,
-        refreshToken,
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          nickName: user.nickName,
-          picture: user.picture,
-          platform: user.platform,
-        },
-      };
-
-      request.log.info('Kakao login 성공 응답 전송');
-      reply.status(200).send({
-        success: true,
-        data: authResponse,
-      });
-    } catch (error: unknown) {
-      request.log.error('Kakao login failed:', error);
-      reply.status(500).send({
-        success: false,
-        error: '카카오 로그인에 실패했습니다.',
         details: (error instanceof Error) ? error.message : String(error),
       });
     }
