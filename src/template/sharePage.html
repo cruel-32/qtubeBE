@@ -1,0 +1,56 @@
+<!-- /quiz/[categoryId] 서버 페이지 -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QTube 퀴즈 챌린지</title>
+    
+    <!-- 카카오톡 공유 메타태그 -->
+    <meta property="og:title" content="QTube 퀴즈 챌린지">
+    <meta property="og:description" content="친구가 공유한 퀴즈를 풀어보세요!">
+    <meta property="og:image" content="https://qtubebe-production.up.railway.app/og-image.png">
+    <meta property="og:url" content="https://qtubebe-production.up.railway.app/quiz/{{categoryId}}?quizIds={{quizIds}}">
+    
+    <!-- iOS Universal Links -->
+    <meta name="apple-itunes-app" content="app-id=YOUR_APP_ID, app-argument=qtubeapps://quiz/{{categoryId}}?quizIds={{quizIds}}">
+    
+    <script>
+        // 모바일 디바이스 감지
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+        
+        function attemptAppOpen() {
+            const categoryId = "{{categoryId}}";
+            const quizIds = "{{quizIds}}";
+            const deepLink = `qtubeapps://quiz/${categoryId}?quizIds=${quizIds}`;
+            
+            if (isMobile) {
+                // 앱 실행 시도
+                window.location.href = deepLink;
+                
+                // 3초 후 앱스토어로 리다이렉트 (앱이 없는 경우)
+                setTimeout(() => {
+                    if (isIOS) {
+                        window.location.href = "https://apps.apple.com/app/your-app-id";
+                    } else if (isAndroid) {
+                        window.location.href = "https://play.google.com/store/apps/details?id=com.qtube.qtube";
+                    }
+                }, 3000);
+            }
+        }
+        
+        // 페이지 로드 시 자동 실행
+        window.onload = attemptAppOpen;
+    </script>
+</head>
+<body>
+    <div style="text-align: center; padding: 50px;">
+        <h1>QTube 퀴즈 챌린지</h1>
+        <p>친구가 공유한 퀴즈를 풀어보세요!</p>
+        <button onclick="attemptAppOpen()">앱에서 열기</button>
+        <p><a href="https://qtubebe-production.up.railway.app">QTube 앱 다운로드</a></p>
+    </div>
+</body>
+</html>
