@@ -10,7 +10,7 @@ import badgeRoutes from '@/modules/Badge/routes/BadgeRoutes';
 import userBadgeRoutes from '@/modules/UserBadge/routes/UserBadgeRoutes';
 
 
-export default async function (fastify: FastifyInstance) {
+export const apiRoutes =  async function (fastify: FastifyInstance) {
   fastify.register(answerRoutes, { prefix: '/answers' });
   fastify.register(authRoutes, { prefix: '/auth' });
   fastify.register(categoryRoutes, { prefix: '/categories' });
@@ -20,5 +20,4 @@ export default async function (fastify: FastifyInstance) {
   fastify.register(rankingRoutes, { prefix: '/ranking' });
   fastify.register(badgeRoutes, { prefix: '/badges' });
   fastify.register(userBadgeRoutes, { prefix: '/user-badges' });
-  
 }

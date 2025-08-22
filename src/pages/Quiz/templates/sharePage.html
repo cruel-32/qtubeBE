@@ -33,7 +33,7 @@
                 // 3초 후 앱스토어로 리다이렉트 (앱이 없는 경우)
                 setTimeout(() => {
                     if (isIOS) {
-                        window.location.href = "https://apps.apple.com/app/your-app-id";
+                        window.location.href = "https://apps.apple.com/app/com.qtube.qtube";
                     } else if (isAndroid) {
                         window.location.href = "https://play.google.com/store/apps/details?id=com.qtube.qtube";
                     }
@@ -50,7 +50,6 @@
         <h1>QTube 퀴즈 챌린지</h1>
         <p>친구가 공유한 퀴즈를 풀어보세요!</p>
         <button onclick="attemptAppOpen()">앱에서 열기</button>
-        <p><a href="https://qtubebe-production.up.railway.app">QTube 앱 다운로드</a></p>
     </div>
 </body>
 </html>

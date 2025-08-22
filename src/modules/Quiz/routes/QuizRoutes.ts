@@ -1,4 +1,7 @@
 import { FastifyInstance } from 'fastify'
+import fs from 'fs'
+import path from 'path'
+import { z } from 'zod'
 import { QuizController } from '@/modules/Quiz/controllers/QuizController'
 import {
   CreateQuizSchema,

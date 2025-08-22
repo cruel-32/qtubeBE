@@ -9,7 +9,8 @@ import { Quiz, User, Answer, Category, Report, UserBadge, Badge } from '@/entiti
 import corsPlugin from '@/plugins/cors'
 import swaggerPlugin from '@/plugins/swagger'
 import zodPlugin from '@/plugins/zod'
-import routes from '@/modules'
+import { apiRoutes } from '@/modules'
+import { pageRoutes } from '@/pages'
 import RankingBatchService from '@/modules/Ranking/services/RankingBatchService';
 
 // FastifyInstance에 authenticate 데코레이터 추가를 위한 타입 확장
@@ -135,9 +136,12 @@ const setupPlugins = async () => {
   // Global hook for authentication
   fastify.addHook('onRequest', async (request, reply) => {
     const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/refresh', '/health', '/'];
-    if (publicRoutes.includes(request.url) || request.url.startsWith('/docs')) {
+    const shareRoutePattern = /\/pages\/quizzes\/share\/[^\/]+$/;
+
+    if (publicRoutes.includes(request.url) || request.url.startsWith('/docs') || shareRoutePattern.test(request.url)) {
       return;
     }
+
     try {
       await request.jwtVerify();
       return
@@ -286,7 +290,8 @@ fastify.get('/test/redis', async (request, reply) => {
 
 // API 라우트 등록
 const setupRoutes = async () => {
-  await fastify.register(routes, { prefix: '/api' })
+  await fastify.register(apiRoutes, { prefix: '/api' })
+  await fastify.register(pageRoutes, { prefix: '/pages' })
 }
 
 const start = async () => {
