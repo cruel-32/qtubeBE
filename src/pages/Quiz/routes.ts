@@ -12,7 +12,7 @@ const pageoutes = async (fastify: FastifyInstance) => {
     schema: {
       params: CategoryParamsSchema,
       querystring: z.object({
-        quizIds: z.string(),
+        quizIds: z.string().optional(),
       }),
       tags: ['Quiz'],
       description: '퀴즈 공유를 위한 HTML 페이지를 제공합니다',
@@ -22,10 +22,7 @@ const pageoutes = async (fastify: FastifyInstance) => {
         const { categoryId } = request.params as { categoryId: string }
         const { quizIds } = request.query as { quizIds?: string }
 
-        const templatePath = path.resolve(
-          process.cwd(),
-          'src/pages/Quiz/templates/sharePage.html',
-        )
+        const templatePath = path.join(__dirname, 'templates', 'sharePage.html')
         const htmlTemplate = fs.readFileSync(templatePath, 'utf-8')
 
         const renderedHtml = htmlTemplate
