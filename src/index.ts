@@ -136,7 +136,7 @@ const setupPlugins = async () => {
   // Global hook for authentication
   fastify.addHook('onRequest', async (request, reply) => {
     const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/refresh', '/health', '/'];
-    const shareRoutePattern = /\/pages\/quizzes\/share\/[^\/]+$/;
+    const shareRoutePattern = /\/pages\/quizzes\/share\/[^\/]+/;
 
     if (publicRoutes.includes(request.url) || request.url.startsWith('/docs') || shareRoutePattern.test(request.url)) {
       return;
