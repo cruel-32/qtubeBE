@@ -4,7 +4,12 @@ import { CreateBadgeInput, UpdateBadgeInput, GetBadgesQuery } from '@/modules/Ba
 export class BadgeController {
   static async createBadge(request: FastifyRequest<{ Body: CreateBadgeInput }>, reply: FastifyReply) {
     try {
-      const newBadge = request.server.repositories.badge.create(request.body);
+      const { condition, ...restOfBody } = request.body;
+      const newBadgeData = {
+        ...restOfBody,
+        condition: typeof condition === 'string' ? JSON.parse(condition) : condition,
+      };
+      const newBadge = request.server.repositories.badge.create(newBadgeData);
       await request.server.repositories.badge.save(newBadge);
       return reply.status(201).send({ success: true, data: newBadge });
     } catch (error) {
@@ -68,7 +73,18 @@ export class BadgeController {
   static async updateBadge(request: FastifyRequest<{ Params: { id: number }; Body: UpdateBadgeInput }>, reply: FastifyReply) {
     try {
       const { id } = request.params;
-      const result = await request.server.repositories.badge.update(id, request.body);
+      const { condition, ...restOfBody } = request.body;
+      const updateData: any = { ...restOfBody };
+      if (condition) {
+        try {
+          updateData.condition = typeof condition === 'string' ? JSON.parse(condition) : condition;
+        } catch (e) {
+          request.log.error(e, '[BadgeController.updateBadge] Failed to parse condition string');
+          // condition이 유효한 JSON이 아닐 경우, 원래 문자열을 그대로 사용하거나 에러 처리
+          updateData.condition = condition;
+        }
+      }
+      const result = await request.server.repositories.badge.update(id, updateData);
       if (result.affected === 0) {
         return reply.status(404).send({ success: false, message: 'Badge not found' });
       }

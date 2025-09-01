@@ -18,8 +18,8 @@ export class Badge {
   @Column({ type: 'varchar', length: 50 })
   type: string;
 
-  @Column({ type: 'varchar', length: 255 })
-  condition: string;
+  @Column({ type: 'jsonb', nullable: true })
+  condition: object;
 
   @Column({ type: 'varchar', length: 50 })
   grade: string; // 배지 등급. BRONZE, SILVER, GOLD, PLATINUM, DIAMOND, MASTER, GRANDMASTER

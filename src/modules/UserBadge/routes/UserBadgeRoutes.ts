@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { UserBadgeController } from '@/modules/UserBadge/controllers/UserBadgeController';
-import { AcquireBadgeSchema } from '@/modules/UserBadge/interfaces/UserBadge';
+import { AcquireBadgeSchema, UpdateEquippedBadgesSchema } from '@/modules/UserBadge/interfaces/UserBadge';
 
 async function userBadgeRoutes(fastify: FastifyInstance) {
   fastify.post('/', {
@@ -11,6 +11,16 @@ async function userBadgeRoutes(fastify: FastifyInstance) {
   fastify.get('/me', {
     schema: { tags: ['UserBadge'] },
     handler: UserBadgeController.getMyBadges
+  });
+
+  fastify.get('/equipped', {
+    schema: { tags: ['UserBadge'] },
+    handler: UserBadgeController.getEquippedBadges
+  });
+
+  fastify.put('/equipped', {
+    schema: { body: UpdateEquippedBadgesSchema, tags: ['UserBadge'] },
+    handler: UserBadgeController.updateEquippedBadges
   });
 }
 

@@ -5,6 +5,22 @@ import { RankingScore, RankingType } from '@/entities/RankingScore';
 import { MoreThan } from 'typeorm';
 import { Ranking, DailyRankingQuery, WeeklyRankingQuery, MonthlyRankingQuery } from '../interfaces/Ranking';
 import { convertNullToUndefined } from '@/utils/dbValueConverter';
+import { Badge } from '@/entities/Badge';
+
+// Helper function to get equipped badges
+function getEquippedBadgesFromUser(user: any): Badge[] {
+  if (!user.equippedBadgeIds || user.equippedBadgeIds.length === 0 || !user.userBadges) {
+    return [];
+  }
+  const equippedBadgeObjects: Badge[] = [];
+  for (const badgeId of user.equippedBadgeIds) {
+    const userBadge = user.userBadges.find((ub: any) => ub.badgeId === badgeId);
+    if (userBadge && userBadge.badge) {
+      equippedBadgeObjects.push(userBadge.badge);
+    }
+  }
+  return equippedBadgeObjects;
+}
 
 export class RankingController {
   // 주간 랭킹 조회 (ISO 8601 기준)
@@ -52,7 +68,7 @@ export class RankingController {
           score: 'DESC',
         },
         take: 100,
-        relations: ['user'],
+        relations: ['user', 'user.userBadges', 'user.userBadges.badge'],
       });
 
       console.log('weekly rankings :::::::: ', rankings)
@@ -165,7 +181,7 @@ export class RankingController {
           score: 'DESC',
         },
         take: 100,
-        relations: ['user'],
+        relations: ['user', 'user.userBadges', 'user.userBadges.badge'],
       });
 
       console.log('Found rankings count:', rankings.length);
@@ -231,7 +247,7 @@ export class RankingController {
           correctAnswers: 'DESC',
         },
         take: 100,
-        relations: ['user'],
+        relations: ['user', 'user.userBadges', 'user.userBadges.badge'],
       });
 
       const response: Ranking[] = rankings.map((r, index) => ({
@@ -313,7 +329,7 @@ export class RankingController {
           rankingType: RankingType.WEEKLY,
           period: weeklyPeriod,
         },
-        relations: ['user'],
+        relations: ['user', 'user.userBadges', 'user.userBadges.badge'],
       });
 
       if (!myRecord) {
@@ -417,7 +433,7 @@ export class RankingController {
           rankingType: RankingType.MONTHLY,
           period: monthlyPeriod,
         },
-        relations: ['user'],
+        relations: ['user', 'user.userBadges', 'user.userBadges.badge'],
       });
 
       if (!myRecord) {
@@ -514,7 +530,7 @@ export class RankingController {
           rankingType: RankingType.DAILY,
           period: dailyPeriod,
         },
-        relations: ['user'],
+        relations: ['user', 'user.userBadges', 'user.userBadges.badge'],
       });
 
       if (!myRecord) {

@@ -62,6 +62,9 @@ export class User {
   @OneToMany(() => RankingScore, (rankingScore) => rankingScore.user)
   rankingScores: RankingScore[];
 
+  @Column('int', { array: true, default: [] })
+  equippedBadgeIds: number[];
+
   @OneToMany(() => UserBadge, userBadge => userBadge.user)
   userBadges: UserBadge[];
 
