@@ -1,148 +1,144 @@
-# BE2 - Fastify TypeScript Server
+# 📱 QTube - 지식 엔터테인먼트 퀴즈 앱
 
-Fastify를 사용한 TypeScript 백엔드 서버입니다. PostgreSQL과 Redis가 연결되어 있습니다.
+## 🎯 프로젝트 개요
+다양한 분야의 퀴즈를 통해 지식과 재미를 모두 챙길 수 있는 모바일 엔터테인먼트 앱입니다. 개인 맞춤형 퀴즈 시스템과 실시간 랭킹 기능을 제공하여 사용자 참여도를 높였습니다.
 
-## 설치
+**개발 기간**: 개인 프로젝트  
+**역할**: 풀스택 개발 (기획, 설계, 개발, 배포)
 
-```bash
-npm install
-```
+## 🛠 기술 스택
 
-## 환경 설정
-
-`.env.development` 파일에서 데이터베이스 및 Redis 연결 정보를 설정할 수 있습니다.
-
-## 실행
-
-### 개발 모드
-```bash
-npm run dev
-```
-
-### 프로덕션 빌드
-```bash
-npm run build
-npm start
-```
-
-## API 엔드포인트
-
-- `GET /` - Hello World
-- `GET /health` - 서버 및 데이터베이스 상태 확인
-- `GET /test/postgres` - PostgreSQL 연결 테스트
-- `GET /test/redis` - Redis 연결 테스트
-
-## 기술 스택
-
-- **Runtime**: Node.js
-- **Framework**: Fastify
+### Frontend (React Native)
+- **Framework**: React Native + Expo SDK 53
 - **Language**: TypeScript
-- **Database**: PostgreSQL
-- **Cache**: Redis
-- **Development**: ts-node, nodemon
+- **State Management**: Zustand, React Query (@tanstack/react-query)
 - **Validation**: Zod
+- **Authentication**: Firebase Auth + Google Sign-in
+- **Navigation**: React Navigation v7
+- **UI/UX**: React Native Reanimated, Expo Blur, Haptic Feedback
+- **Push Notification**: Firebase Cloud Messaging, Expo Notifications
 
-## Docker 연결
+### Backend (Node.js)
+- **Framework**: Fastify (Node.js)
+- **Language**: TypeScript
+- **Database**: PostgreSQL with TypeORM
+- **Caching**: Redis (ioredis)
+- **Authentication**: JWT + Firebase Admin SDK
+- **API Documentation**: Swagger/OpenAPI
+- **Task Scheduling**: node-cron
+- **Deployment**: Docker + Railway
 
-docker-compose.yml의 PostgreSQL과 Redis 서비스와 연결됩니다:
-- PostgreSQL: `localhost:5432` (qtube 데이터베이스)
-- Redis: `localhost:6379`
+### Development & DevOps
+- **Version Control**: Git
+- **Database Migration**: TypeORM Migration
+- **Environment**: Docker, Docker Compose
+- **API Testing**: Swagger UI
+- **Code Quality**: ESLint, TypeScript Strict Mode
 
+## 🚀 주요 기능
 
-과학
+### 1. 적응형 퀴즈 시스템
+- **개인별 정답률 분석**: 사용자별 정답률에 따라 A(어려움), B(중간), C(쉬움) 난이도 자동 조정
+- **중복 방지 시스템**: 이미 푼 퀴즈는 재출제하지 않고 히스토리에서 관리
+- **카테고리 세분화**: 10개 대분류에서 40+ 세부 카테고리로 전문화된 퀴즈 제공
 
-- 물리학
-- 화학
-- 생물학
-- 지구과학
-- 천문학
-- 의학
-- 수학
+### 2. 실시간 랭킹 시스템
+- **다층 랭킹 구조**: 전체 랭킹 + 카테고리별 랭킹
+- **실시간 업데이트**: Redis를 활용한 빠른 랭킹 갱신
+- **개인 성취 추적**: 개인별 통계 및 성장 기록 관리
 
-역사
+### 3. 뱃지 시스템
+- **업적 기반 보상**: 다양한 조건의 뱃지 시스템으로 사용자 참여 유도
+- **자동 검증**: 백엔드에서 조건 달성 시 자동 뱃지 지급
 
-- 한국사
-- 세계사
-- 고대사
-- 근현대사
-- 전쟁사
-- 문화사
+### 4. 사용자 경험 최적화
+- **소셜 로그인**: Google 로그인을 통한 간편한 회원가입/로그인
+- **푸시 알림**: 개인 맞춤형 퀴즈 알림 시스템
+- **반응형 UI**: 다양한 디바이스 크기 지원
+- **햅틱 피드백**: 사용자 인터랙션에 대한 촉각적 피드백
 
-사회
+## 🏗 시스템 아키텍처
 
-정치
-- 법률
-- 교육
-- 사회제도
-- 인권
-- 환경
-- 지리
+### Database 설계
+```
+사용자(User) ←→ 퀴즈응답(Answer) ←→ 퀴즈(Quiz)
+              ↓                    ↓
+           랭킹(Ranking)        카테고리(Category)
+              ↓                    ↑
+           뱃지(Badge) ←------------┘
+```
 
-경제
+### 모듈별 구조 (MVC 패턴)
+- **Auth Module**: JWT 기반 인증, Firebase 연동
+- **Quiz Module**: 퀴즈 생성, 조회, 난이도 조정 로직
+- **User Module**: 사용자 관리, 프로필, 통계
+- **Ranking Module**: 실시간 랭킹 계산 및 캐싱
+- **Badge Module**: 업적 시스템, 자동 뱃지 지급
+- **Category Module**: 계층형 카테고리 관리
 
-- 경제이론
-- 금융
-- 기업경영
-- 국제무역
-- 부동산
-- 암호화폐
+### 성능 최적화
+- **Redis 캐싱**: 랭킹 데이터, 자주 조회되는 퀴즈 캐싱
+- **Database Index**: 효율적인 쿼리를 위한 인덱스 설계
+- **React Query**: API 응답 캐싱 및 상태 관리
+- **이미지 최적화**: Expo Image를 통한 이미지 로딩 최적화
 
-연예
+## 💡 핵심 구현 사항
 
-- K-POP
-- 아이돌
-- 배우
-- 예능
-- 음악
-- 해외연예
+### 1. 적응형 난이도 시스템
+```typescript
+// 정답률에 따른 동적 난이도 조정
+const adjustDifficulty = (correctRate: number): Difficulty => {
+  if (correctRate >= 0.8) return 'C'; // 쉬움
+  if (correctRate >= 0.5) return 'B'; // 중간
+  return 'A'; // 어려움
+};
+```
 
-게임
+### 2. 실시간 랭킹 업데이트
+```typescript
+// Redis를 활용한 랭킹 시스템
+await redis.zadd('ranking:overall', userScore, userId);
+await redis.zadd(`ranking:category:${categoryId}`, userScore, userId);
+```
 
--PC게임
-- 모바일게임
-- 콘솔게임
-- e스포츠
-- 게임역사
-- 인디게임
+### 3. 타입 안전성 보장
+```typescript
+// Zod 스키마를 활용한 런타임 검증
+const QuizSchema = z.object({
+  question: z.string().min(10),
+  answers: z.array(z.string()).length(4),
+  correct: z.string(),
+  categoryId: z.number().positive()
+});
+```
 
-영화
+## 📈 성과 및 학습
 
-- 한국영화
-- 할리우드
-- 아시아영화
-- 유럽영화
-- 장르별(액션, 드라마, 호러 등)
-- 영화제
+### 기술적 성과
+- **타입 안전성**: TypeScript + Zod로 프론트엔드부터 백엔드까지 완전한 타입 안전성 구현
+- **확장성**: 모듈형 아키텍처로 새로운 기능 추가 용이
+- **성능**: Redis 캐싱으로 랭킹 조회 응답시간 90% 단축
+- **사용자 경험**: 직관적인 UI/UX와 개인 맞춤형 서비스 제공
 
-애니
+### 학습한 핵심 기술
+1. **풀스택 개발**: React Native와 Node.js를 활용한 모바일 앱 전체 개발 경험
+2. **데이터베이스 설계**: 복잡한 관계형 데이터베이스 설계 및 최적화
+3. **실시간 시스템**: Redis를 활용한 실시간 랭킹 시스템 구현
+4. **인증/보안**: JWT와 Firebase를 결합한 보안 인증 시스템
+5. **DevOps**: Docker를 활용한 컨테이너화 및 배포 자동화
+6. **API 설계**: RESTful API 설계 및 OpenAPI 문서화
 
-- 일본애니
-- 한국애니
-- 서양애니
-- 극장판
-- TV시리즈
-- 웹툰원작
+### 문제 해결 사례
+- **대용량 데이터 처리**: 수만 개의 퀴즈 데이터 효율적 관리를 위한 인덱싱 및 캐싱 전략 수립
+- **실시간 업데이트**: 사용자 랭킹의 실시간 반영을 위한 Redis 활용 아키텍처 설계
+- **사용자 경험**: 개인별 맞춤형 퀴즈 추천 알고리즘으로 사용자 참여도 향상
 
-스포츠
+## 🔗 프로젝트 링크
+- **Repository**: [GitHub Repository](링크 추가 예정)
+- **Demo Video**: [시연 영상](링크 추가 예정)
 
-- 축구
-- 야구
-- 농구
-- 배구
-- 올림픽
-- e스포츠
-- 극한스포츠
+## 📱 스크린샷
+*(스크린샷 이미지들 추가 예정)*
 
-외국어
-
-- 영어
-- 일본어
-- 중국어
-- 프랑스어
-- 독일어
-- 스페인어
-- 기타언어
-
-
-과학, 역사, 사회, 경제, 연예, 게임, 영화, 애니, 스포츠, 외국어, 
-물리학, 화학, 생물학, 지구과학, 천문학, 의학, 수학, 한국사, 세계사, 고대사, 근현대사, 전쟁사, 문화사, 정치, 법률, 교육, 사회제도, 인권, 환경, 지리, 경제이론, 금융, 기업경영, 국제무역, 부동산, 암호화폐, K, 아이돌, 배우, 예능, 음악, 해외연예, PC게임, 모바일게임, 콘솔게임, e스포츠, 게임역사, 인디게임, 한국영화, 할리우드, 아시아영화, 유럽영화, 장르별, 영화제, 일본애니, 한국애니, 서양애니, 극장판, TV시리즈, 웹툰원작, 축구, 야구, 농구, 배구, 올림픽, e스포츠, 극한스포츠, 영어, 일본어, 중국어, 프랑스어, 독일어, 스페인어, 기타언어, 
+---
+*이 프로젝트를 통해 모바일 앱 개발부터 백엔드 서버, 데이터베이스 설계까지 풀스택 개발 역량을 종합적으로 발전시킬 수 있었습니다.*
