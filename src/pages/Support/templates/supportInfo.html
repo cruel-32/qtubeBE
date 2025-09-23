@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>앱 지원 정보 - QTube</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#6366F1',secondary:'#F8F9FF'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-sm mx-auto bg-white min-h-screen">
+        <!-- Header -->
+        <header class="fixed top-0 w-full max-w-sm bg-white border-b border-gray-100 z-50">
+            <div class="flex items-center justify-between px-4 py-3">
+                <h1 class="text-lg font-semibold text-gray-900">지원 정보</h1>
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-information-line text-primary"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <main class="pt-16 pb-6">
+            <!-- App Info Section -->
+            <section class="px-4 py-6 bg-white">
+                <div class="flex items-center space-x-4 mb-4">
+                    <div class="w-16 h-16 bg-gradient-to-br from-primary to-purple-600 rounded-2xl flex items-center justify-center">
+                        <span class="text-white font-['Pacifico'] text-lg">Q</span>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 mb-1">QTube</h2>
+                        <p class="text-sm text-gray-600">버전 1.0.0</p>
+                    </div>
+                </div>
+                <p class="text-gray-700 leading-relaxed">
+                    YouTube 퀴즈를 통해 학습하고 지식을 테스트할 수 있는 혁신적인 교육 앱입니다. 랭킹 시스템과 배지 시스템으로 재미있게 학습하며, 다양한 카테고리의 퀴즈를 즐길 수 있습니다.
+                </p>
+            </section>
+
+            <!-- Developer Info Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">개발자 정보</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-building-line text-gray-600"></i>
+                        </div>
+                        <span class="text-gray-700">QTube Team</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-mail-line text-gray-600"></i>
+                        </div>
+                        <a href="mailto:cshtest8508@gmail.com" class="text-primary cursor-pointecshtest8508@gmail.com@qtube.app</a>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-map-pin-line text-gray-600"></i>
+                        </div>
+                        <span class="text-gray-700">대한민국 서울특별시</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Support Options Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">지원 옵션</h3>
+                <div class="space-y-3">
+                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer !rounded-button">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-customer-service-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-900 font-medium">고객 지원 문의</span>
+                        </div>
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-arrow-right-s-line text-gray-400"></i>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer !rounded-button">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-question-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-900 font-medium">자주 묻는 질문</span>
+                        </div>
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-arrow-right-s-line text-gray-400"></i>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer !rounded-button">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-feedback-line text-primary"></i>
+                            </div>
+                            <span class="text-gray-900 font-medium">피드백 보내기</span>
+                        </div>
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-arrow-right-s-line text-gray-400"></i>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- App Features Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">주요 기능</h3>
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 flex items-center justify-center mt-0.5">
+                            <i class="ri-play-circle-line text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-900 mb-1">YouTube 기반 퀴즈</h4>
+                            <p class="text-xs text-gray-600">다양한 YouTube 콘텐츠를 기반으로 한 흥미로운 퀴즈</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 flex items-center justify-center mt-0.5">
+                            <i class="ri-trophy-line text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-900 mb-1">랭킹 시스템</h4>
+                            <p class="text-xs text-gray-600">다른 사용자들과 점수를 경쟁하는 실시간 랭킹</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 flex items-center justify-center mt-0.5">
+                            <i class="ri-medal-line text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-900 mb-1">배지 시스템</h4>
+                            <p class="text-xs text-gray-600">성취도에 따라 다양한 배지를 획득하는 재미</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 flex items-center justify-center mt-0.5">
+                            <i class="ri-folder-line text-primary"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-900 mb-1">카테고리별 퀴즈</h4>
+                            <p class="text-xs text-gray-600">관심 분야별로 분류된 다양한 퀴즈 카테고리</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Legal Info Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">법적 정보</h3>
+                <div class="space-y-3">
+                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer !rounded-button" onclick="openPrivacyPolicy()">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-shield-line text-gray-600"></i>
+                            </div>
+                            <span class="text-gray-900">개인정보 처리방침</span>
+                        </div>
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-external-link-line text-gray-400"></i>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer !rounded-button">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-file-list-line text-gray-600"></i>
+                            </div>
+                            <span class="text-gray-900">이용약관</span>
+                        </div>
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-external-link-line text-gray-400"></i>
+                        </div>
+                    </button>
+                    
+                    <button class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer !rounded-button">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-6 h-6 flex items-center justify-center">
+                                <i class="ri-copyright-line text-gray-600"></i>
+                            </div>
+                            <span class="text-gray-900">오픈소스 라이선스</span>
+                        </div>
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-external-link-line text-gray-400"></i>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Technical Info Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">기술 정보</h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">지원 iOS 버전</h4>
+                        <p class="text-gray-600">iOS 13.0 이상</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">호환 기기</h4>
+                        <p class="text-gray-600">iPhone 7 이상, iPad (5세대) 이상, iPod touch (7세대)</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">앱 용량</h4>
+                        <p class="text-gray-600">약 50 MB</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">지원 언어</h4>
+                        <p class="text-gray-600">한국어</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-sm font-medium text-gray-900 mb-2">인터넷 연결</h4>
+                        <p class="text-gray-600">Wi-Fi 또는 모바일 데이터 연결 필요</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">연락처</h3>
+                <div class="space-y-3">
+                    <div class="p-4 bg-primary/5 rounded-lg">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-mail-line text-primary"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">지원 이메일</span>
+                        </div>
+                        <a href="mailto:support@qtube.app" class="text-primary cursor-pointer">support@qtube.app</a>
+                    </div>
+                    
+                    <div class="p-4 bg-secondary/5 rounded-lg">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-time-line text-gray-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">지원 시간</span>
+                        </div>
+                        <p class="text-gray-700">평일 09:00 - 18:00 (주말 및 공휴일 제외)</p>
+                        <p class="text-xs text-gray-500 mt-1">문의 응답은 24시간 이내에 답변드립니다</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- App Updates Section -->
+            <section class="px-4 py-6 bg-white mt-2">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">업데이트 정보</h3>
+                <div class="space-y-3">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-rocket-line text-green-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">최신 버전</span>
+                        </div>
+                        <p class="text-gray-700">v1.0.0 - 출시 버전</p>
+                        <p class="text-xs text-gray-500 mt-1">2025년 1월 출시</p>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <h4 class="text-sm font-medium text-gray-900">업데이트 내역</h4>
+                        <ul class="text-xs text-gray-600 space-y-1 ml-4">
+                            <li>• 첫 번째 공식 출시</li>
+                            <li>• YouTube 퀴즈 시스템 구현</li>
+                            <li>• 랭킹 및 배지 시스템 도입</li>
+                            <li>• 다양한 카테고리 퀴즈 제공</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="px-4 py-6 text-center">
+                <p class="text-xs text-gray-500">© 2025 QTube Team. All rights reserved.</p>
+                <p class="text-xs text-gray-400 mt-1">마지막 업데이트: 2025년 1월 1일</p>
+            </footer>
+        </main>
+    </div>
+
+    <script id="support-interactions">
+        document.addEventListener('DOMContentLoaded', function() {
+            const buttons = document.querySelectorAll('button[class*="cursor-pointer"]');
+            
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const buttonText = this.querySelector('span')?.textContent || '';
+                    
+                    if (buttonText.includes('고객 지원 문의')) {
+                        window.location.href = 'mailto:support@qtube.app?subject=QTube 앱 지원 문의';
+                    } else if (buttonText.includes('자주 묻는 질문')) {
+                        showToast('FAQ는 앱 내 설정에서 확인하실 수 있습니다.');
+                    } else if (buttonText.includes('피드백 보내기')) {
+                        window.location.href = 'mailto:feedback@qtube.app?subject=QTube 앱 피드백';
+                    } else if (buttonText.includes('이용약관')) {
+                        showToast('이용약관 페이지는 준비 중입니다.');
+                    } else if (buttonText.includes('오픈소스 라이선스')) {
+                        showToast('오픈소스 라이선스 정보는 앱 내에서 확인하실 수 있습니다.');
+                    }
+                });
+            });
+        });
+        
+        function openPrivacyPolicy() {
+            // 개인정보 처리방침 페이지로 이동
+            window.open('/pages/privacy/policy', '_blank');
+        }
+    </script>
+
+    <script id="toast-system">
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast-message');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-message fixed bottom-20 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg text-sm z-50 opacity-0 transition-opacity duration-300';
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '1';
+            }, 100);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

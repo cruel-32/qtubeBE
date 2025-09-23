@@ -382,7 +382,6 @@ export class UserController {
         await transactionalEntityManager
           .getRepository(Answer)
           .delete({ userId: id });
-  
         
   
         // 사용자의 랭킹 점수 삭제

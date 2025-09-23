@@ -137,8 +137,10 @@ const setupPlugins = async () => {
   fastify.addHook('onRequest', async (request, reply) => {
     const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/refresh', '/health', '/'];
     const shareRoutePattern = /\/pages\/quizzes\/share\/[^\/]+/;
+    const privacyRoutePattern = /\/pages\/privacy\/policy/;
+    const supportRoutePattern = /\/pages\/support\/info/;
 
-    if (publicRoutes.includes(request.url) || request.url.startsWith('/docs') || shareRoutePattern.test(request.url)) {
+    if (publicRoutes.includes(request.url) || request.url.startsWith('/docs') || shareRoutePattern.test(request.url) || privacyRoutePattern.test(request.url) || supportRoutePattern.test(request.url)) {
       return;
     }
 
