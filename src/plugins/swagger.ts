@@ -19,7 +19,7 @@ export default fp(async function (fastify) {
       },
       servers: [
         {
-          url: config.apiHost || 'http://localhost:8080',
+          url: config.apiHost || 'http://localhost:8081',
           description: 'Development server',
         },
       ],

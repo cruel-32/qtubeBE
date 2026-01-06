@@ -30,7 +30,7 @@ COPY --from=builder /app/dist ./dist
 
 # Railway provides the PORT environment variable, which the app should use.
 # The EXPOSE instruction is good practice but not strictly necessary on Railway.
-EXPOSE 8080
+EXPOSE 8081
 
 # Start the app
 CMD ["npm", "run", "start"]
