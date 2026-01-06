@@ -27,8 +27,8 @@ jobs:
             git pull origin master
             
             # Build the backend service image
-            docker-compose build backend
+            docker compose build backend
             
             # Restart the backend service
-            docker-compose up -d --no-deps backend
+            docker compose up -d --no-deps backend
 
