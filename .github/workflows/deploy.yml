@@ -1,0 +1,36 @@
+name: Deploy to a personal server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            # Navigate to your project directory on the server
+            # 이 경로를 실제 프로젝트 경로로 수정해주세요.
+            cd ~/qtube/BE
+            
+            # Pull the latest changes from the master branch
+            git pull origin master
+            
+            # Install dependencies
+            npm install
+            
+            # Build the project
+            npm run build
+            
+            # Reload the application with pm2
+            pm2 reload ecosystem.config.js
