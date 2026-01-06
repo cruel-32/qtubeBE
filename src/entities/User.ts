@@ -14,6 +14,7 @@ import { UserBadge } from "./UserBadge";
 
 export enum Platform {
   GOOGLE = "google",
+  APPLE = "apple",
   NAVER = "naver",
   KAKAO = "kakao",
 }

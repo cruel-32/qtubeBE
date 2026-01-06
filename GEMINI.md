@@ -84,4 +84,4 @@ BE/
 - 웹버전은 만들지 않고 ios와 android 버전만 만듭니다.
 - context7 mcp를 이용해 항상 최신 문서를 확인하고 작업합니다.
 - 파일에 대한 경로를 알려주면 직접 접근이 힘들 때는 @wonderwhy-er/desktop-commander 를 사용하여 접근한다.
-- 로컬 postgre에 접속할 땐 postgre-sql-mcp-server 를 사용하여 접근한다.
+- 로컬 postgre에 접속할 땐 mcp 서버를 사용하여 접근한다.

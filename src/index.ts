@@ -135,7 +135,7 @@ const setupPlugins = async () => {
 
   // Global hook for authentication
   fastify.addHook('onRequest', async (request, reply) => {
-    const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/refresh', '/health', '/'];
+    const publicRoutes = ['/api/auth/login', '/api/auth/google', '/api/auth/apple', '/api/auth/refresh', '/health', '/'];
     const shareRoutePattern = /\/pages\/quizzes\/share\/[^\/]+/;
     const privacyRoutePattern = /\/pages\/privacy\/policy/;
     const supportRoutePattern = /\/pages\/support\/info/;

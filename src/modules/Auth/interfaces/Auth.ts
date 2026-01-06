@@ -2,6 +2,15 @@ export interface GoogleLoginRequest {
   idToken: string;
 }
 
+export interface AppleLoginRequest {
+  idToken: string;
+  nonce?: string;
+  fullName?: {
+    givenName?: string;
+    familyName?: string;
+  };
+}
+
 export interface RefreshTokenRequest {
   refreshToken: string;
 }

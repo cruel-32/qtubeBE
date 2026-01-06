@@ -30,3 +30,16 @@ const privacyRoutes = async (fastify: FastifyInstance) => {
 }
 
 export default privacyRoutes
+
+
+
+
+
+
+
+
+
+
+
+
+

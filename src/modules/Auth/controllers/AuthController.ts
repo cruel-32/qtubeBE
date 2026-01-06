@@ -3,13 +3,12 @@ import * as admin from 'firebase-admin'
 import { Platform } from '@/entities/User'
 import {
   GoogleLoginRequest,
+  AppleLoginRequest,
   RefreshTokenRequest,
   LogoutRequest,
   AuthResponse,
   TestLoginRequest,
 } from '@/modules/Auth/interfaces/Auth'
-import { config } from '@/config/env' // config 임포트 추가
-import axios from 'axios';
 
 const ACCESS_TOKEN_EXPIRES_IN = '15m' // 15분
 const REFRESH_TOKEN_EXPIRES_IN = '7d' // 7일
@@ -133,6 +132,150 @@ export class AuthController {
     }
   }
 
+  static async appleLogin(
+    request: FastifyRequest<{ Body: AppleLoginRequest }>,
+    reply: FastifyReply
+  ) {
+    try {
+      request.log.info('Apple login 시작');
+      const { idToken, fullName } = request.body;
+      
+      if (!idToken) {
+        request.log.error('ID Token이 없음');
+        reply.status(400).send({
+          success: false,
+          error: 'ID 토큰이 필요합니다.',
+        });
+        return;
+      }
+      
+      request.log.info('Firebase ID 토큰 검증 시작 (Apple)');
+      // Firebase ID 토큰 검증 (Google 로그인과 동일한 방식)
+      const decodedToken = await admin.auth().verifyIdToken(idToken);
+      request.log.info('Firebase ID 토큰 검증 성공 (Apple)', { uid: decodedToken.uid });
+      
+      const firebaseUid = decodedToken.uid;
+      const email = decodedToken.email;
+      
+      // Apple에서 받은 이름 정보를 우선 사용, 없으면 Firebase 정보 사용
+      let name = decodedToken.name;
+      if (!name && fullName) {
+        const { givenName, familyName } = fullName;
+        if (givenName || familyName) {
+          name = `${givenName || ''} ${familyName || ''}`.trim();
+        }
+      }
+      if (!name) {
+        name = email || 'Apple 사용자';
+      }
+      
+      const picture = decodedToken?.picture;
+
+      // Firebase UID로 사용자 조회 (id 또는 profile 필드에서)
+      let user = await request.server.repositories.user.findOne({
+        where: [
+          { id: firebaseUid, platform: Platform.APPLE },
+          { profile: firebaseUid, platform: Platform.APPLE }
+        ],
+      });
+
+      if (!user) {
+        // 새 사용자 생성
+        user = request.server.repositories.user.create({
+          id: firebaseUid, // Firebase UID를 id로 사용
+          email: email || undefined,
+          name: name || undefined,
+          nickName: name || 'Apple 사용자', // 초기 닉네임은 이름과 동일하게 설정
+          picture: picture || undefined,
+          platform: Platform.APPLE,
+          profile: firebaseUid, // Firebase UID를 profile 필드에 저장
+        });
+        user = await request.server.repositories.user.save(user);
+        request.log.info('새 Apple 사용자 생성 완료', { userId: user.id, name: user.name });
+      } else {
+        // 기존 사용자 정보 업데이트
+        let shouldUpdate = false;
+        
+        if (email && user.email !== email) {
+          user.email = email;
+          shouldUpdate = true;
+        }
+        
+        // 이름이 있고, 기존 이름이 이메일이거나 'Apple 사용자'인 경우 업데이트
+        if (name && (user.name === user.email || user.name === 'Apple 사용자' || !user.name)) {
+          user.name = name;
+          user.nickName = name; // 닉네임도 함께 업데이트
+          shouldUpdate = true;
+        }
+        
+        if (picture !== undefined && user.picture !== picture) {
+          user.picture = picture;
+          shouldUpdate = true;
+        }
+        
+        if (shouldUpdate) {
+          user = await request.server.repositories.user.save(user);
+          request.log.info('기존 Apple 사용자 정보 업데이트 완료', { userId: user.id, name: user.name });
+        }
+      }
+
+      // JWT 토큰 생성 (타입 정의와 일치하도록 id 사용)
+      request.log.info('JWT 토큰 생성 시작');
+      const accessToken = await reply.jwtSign(
+        { id: user.id },
+        { expiresIn: ACCESS_TOKEN_EXPIRES_IN }
+      );
+      const refreshToken = await reply.jwtSign(
+        { id: user.id },
+        { expiresIn: REFRESH_TOKEN_EXPIRES_IN }
+      );
+      request.log.info('JWT 토큰 생성 완료');
+
+      // DB에 refreshToken 저장
+      user.refreshToken = refreshToken;
+      await request.server.repositories.user.save(user);
+      request.log.info('refreshToken 저장 완료');
+
+      const authResponse: AuthResponse = {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          nickName: user.nickName,
+          picture: user.picture,
+          platform: user.platform,
+        },
+      };
+
+      request.log.info('Apple login 성공 응답 전송');
+      reply.status(200).send({
+        success: true,
+        data: authResponse,
+      });
+    } catch (error: unknown) {
+      request.log.error('Apple login failed:', error);
+      if (error instanceof Error && 'code' in error) {
+        const firebaseError = error as { code: string; message: string };
+        if (firebaseError.code === 'auth/id-token-expired' || firebaseError.code === 'auth/invalid-id-token') {
+          reply.status(401).send({
+            success: false,
+            error: '유효하지 않은 ID 토큰입니다.',
+            details: firebaseError.message,
+          });
+          return;
+        }
+      }
+      
+      reply.status(500).send({
+        success: false,
+        error: 'Apple 로그인에 실패했습니다.',
+        details: (error instanceof Error) ? error.message : String(error),
+      });
+    }
+  }
+
   static async refresh(
     request: FastifyRequest<{ Body: RefreshTokenRequest }>,
     reply: FastifyReply
@@ -156,7 +299,7 @@ export class AuthController {
         request.headers.authorization = `Bearer ${refreshToken}`;
         decoded = await request.jwtVerify() as { id: string };
         request.headers.authorization = originalAuth;
-      } catch (err) {
+      } catch {
         reply.status(401).send({
           success: false,
           error: '유효하지 않은 리프레시 토큰입니다.',
