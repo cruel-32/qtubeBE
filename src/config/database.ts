@@ -11,8 +11,7 @@ const baseOptions: DataSourceOptions = {
   migrations: [__dirname + '/../migrations/**/*.{ts,js}'],
   subscribers: [__dirname + '/../subscribers/**/*.{ts,js}'],
   extra: {
-    timezone: 'UTC',
-    ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: false,
   },
 };
 
@@ -41,7 +40,7 @@ export const registerPostgres = async (fastify: FastifyInstance) => {
   console.log('connectionString :::::: ', connectionString);
   await fastify.register(require('@fastify/postgres'), {
     connectionString: connectionString,
-    ssl: config.nodeEnv === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: false,
   })
 }
 

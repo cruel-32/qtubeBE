@@ -11,13 +11,13 @@ services:
       - "8081:8081" # Changed to 8081 as per instruction
 
     env_file:
-      - ./.env.development
+      - ./.env
     
     depends_on:
       - q_redis
       - q_postgres
 
-    command: pm2-runtime start ecosystem.config.js
+    command: sh -c "/app/node_modules/.bin/pm2-runtime start ecosystem.config.js"
     networks:
       - app-network-group
 
@@ -43,7 +43,7 @@ services:
       - "5432:5432"
     environment:
       - POSTGRES_USER=q_postgres
-      - POSTGRES_PASSWORD=q_password
+      - POSTGRES_PASSWORD=qtube_super_secret_password
       - POSTGRES_DB=qtube
     volumes:
       - qpgdata:/var/lib/postgresql/data
