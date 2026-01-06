@@ -19,18 +19,17 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            # Navigate to your project directory on the server
-            # 이 경로를 실제 프로젝트 경로로 수정해주세요.
-            cd ~/qtube/BE
+            # Navigate to the project directory
+            cd ~/qtubeBE
             
-            # Pull the latest changes from the master branch
+            # Pull the latest changes
             git pull origin master
             
-            # Install dependencies
-            npm install
+            # Build the backend service image
+            docker-compose build backend
             
-            # Build the project
-            npm run build
-            
-            # Reload the application with pm2
-            pm2 reload ecosystem.config.js
+            # Restart the backend service
+            docker-compose up -d --no-deps backend
+
+            # (Optional) Clean up old images
+            docker image prune -f
