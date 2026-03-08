@@ -51,9 +51,11 @@ if (!admin.apps.length) {
     })
   } else {
     // Final fallback: Application Default Credentials (e.g., GOOGLE_APPLICATION_CREDENTIALS)
+    // projectId를 명시해야 verifyIdToken 시 "Unable to detect a Project Id" 방지
     try {
       admin.initializeApp({
         credential: admin.credential.applicationDefault(),
+        ...(config.firebaseProjectId && { projectId: config.firebaseProjectId }),
       })
     } catch (e) {
       throw new Error(

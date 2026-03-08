@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('production'),
-  PORT: z.string().transform(Number).default('8081'),
+  PORT: z.string().transform(Number).default('8080'),
   
   // Database
   DB_HOST: z.string().optional(),
